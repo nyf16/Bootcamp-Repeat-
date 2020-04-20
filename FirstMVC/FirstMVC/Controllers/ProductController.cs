@@ -15,5 +15,16 @@ namespace FirstMVC.Controllers
 
             return View(productList);
         }
+
+        public IActionResult Detail(int id)
+        {
+            List<Product> produtList = Product.GetSampleData();
+            // örnek data icerisindeki parametreden gelen id' ye sahip urunu getir!
+
+            // Where kosulu tum dataList icerisindeki itemlarin kosullandirilmasidir.
+            Product item = produtList.Where(x => x.Id == id).FirstOrDefault();
+
+            return View(item);
+        }
     }
 }
