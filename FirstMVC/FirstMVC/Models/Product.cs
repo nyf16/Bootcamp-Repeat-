@@ -47,7 +47,12 @@ namespace FirstMVC.Models
                 Name = "SteelSeries Arctis Pro Wireless Hi-Res Oyuncu Kulaklığı",
                 Price = 3.299
             };
-            return new List<Product>();
+
+            List<Product> sampleData = new List<Product>();
+            sampleData.Add(urun1);
+            sampleData.Add(urun2);
+            sampleData.Add(urun3);
+            return sampleData;
         }
     }
 }
