@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using StartEFCore.Entityframework;
 using StartEFCore.Models;
 
@@ -32,10 +34,10 @@ namespace StartEFCore.Controllers
 
         //TODO: Yeni oyuncu oluşturmak belirtilen takım için (Create)
         //[Route("create/team/player/{id}")]
-        public IActionResult CreatePlayerToTeam(int TeamId)
+        public IActionResult CreatePlayerToTeam(int teamId)
         {
             Player model = new Player();
-            model.TeamId = TeamId;
+            model.TeamId = teamId;
             return View(model);
         }
         [HttpPost]
@@ -50,14 +52,66 @@ namespace StartEFCore.Controllers
                 _context.Players.Add(model);
                 // contexteki tüm değişiklikleri kaydet
                 _context.SaveChanges();
+
+                return RedirectToAction("TeamPlayers", new { id = model.TeamId });
             }
             return View(model);
         }
 
         //TODO: Id'si eşit olan oyuncunun bilgileri (Detail)
+        public IActionResult Details(int id)
+        {
+            Player model = _context.Players.Find(id);
+            return View(model);
+        }
 
         //TODO: Id'si eşit olan oyuncunun bilgilerini güncelle (Update)
+        public IActionResult Edit(int id)
+        {
+            Player model = _context.Players.Find(id);
+            ViewBag.TeamsDDL = _context.Teams.Select(u => new SelectListItem
+            {
+                Selected = false,
+                Text = u.Name,
+                Value = u.Id.ToString()
+            }).ToList();
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Player model)
+        {
+            if (id != model.Id)
+                return NotFound();
+            if (ModelState.IsValid)
+            {
+                // context ile güncelleme
+                try
+                {
+                    //_context.Players.Update(model);
+                    //_context.SaveChanges();
 
+                    TryToUpdatePlayer(model);
+                    //return RedirectToAction("Edit", new { id = id });
+                    return RedirectToAction("Edit", new { id });
+                }
+                catch (DBConcurrencyException ex)
+                {
+                    if (_context.Players.Find(id) == null)
+                        return NotFound();
+                    throw (ex);
+                }
+            }
+            return View(model);
+
+        }
+
+        // void method hic birsey dönmez
+        private void TryToUpdatePlayer(Player model)
+        {
+            _context.Players.Update(model);
+            _context.SaveChanges();
+        }
         //TODO: Id'si eşit olan oyuncuyu sil (Delete)
     }
 }

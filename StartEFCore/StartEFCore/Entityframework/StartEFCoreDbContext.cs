@@ -12,7 +12,7 @@ namespace StartEFCore.Entityframework
         // Yapici method
         public StartEFCoreDbContext(DbContextOptions<StartEFCoreDbContext> options) : base(options)
         {
-
+            // bos constructor
         }
 
         // Model siniflari al ve ef ile tanıstır yani contexte ekle
