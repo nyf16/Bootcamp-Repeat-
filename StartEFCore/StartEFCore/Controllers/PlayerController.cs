@@ -20,7 +20,8 @@ namespace StartEFCore.Controllers
         // TODo: Tüm oyuncuları getirecek ındex actioni yap
         public IActionResult Index()
         {
-            return View();
+            List<Player> list = _context.Players.ToList();
+            return View(list);
         }
         // TeamId değerine eşit gelecek id parametresi alır
         // TODO: Takımın oyuncularını listele (List)
@@ -132,8 +133,11 @@ namespace StartEFCore.Controllers
                 _context.Players.Remove(player);
                 _context.SaveChanges();
 
-                return RedirectToAction("TeamPlayers",
-                    new { id = player.TeamId });
+                //return RedirectToAction("TeamPlayers",
+                //    new { id = player.TeamId });
+
+                return RedirectToAction("Index");
+
             }
             catch (DBConcurrencyException ex)
             {

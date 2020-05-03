@@ -54,6 +54,9 @@ namespace StartEFCore.Controllers
         //TODO: Id'si eşit olan takımın bilgilerini güncelle (Update)
 
         //TODO: Id'si eşit olan takımı sil (Delete)
+        //TODO: Delete yapılırken takıma ait oyuncu var mı kontrol et
+        // yoksa sil
+        // varsa silme
 
     }
 }
