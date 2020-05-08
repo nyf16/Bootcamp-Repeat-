@@ -27,6 +27,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Year)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedDate)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -48,6 +54,12 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModifiedDate)
                 </td>
                 <td>
                     <a asp-action="TeamPlayers" asp-controller="Player" asp-route-id="@item.Id">Players</a> |

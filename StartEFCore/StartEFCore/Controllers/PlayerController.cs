@@ -18,6 +18,7 @@ namespace StartEFCore.Controllers
             _context = context;
         }
         // TODo: Tüm oyuncuları getirecek ındex actioni yap
+        // CreatedDate, ModifiedDate
         public IActionResult Index()
         {
             List<Player> list = _context.Players.ToList();
@@ -25,6 +26,7 @@ namespace StartEFCore.Controllers
         }
         // TeamId değerine eşit gelecek id parametresi alır
         // TODO: Takımın oyuncularını listele (List)
+        // CreatedDate, ModifiedDate
         public IActionResult TeamPlayers(int id)
         {
             List<Player> list = _context.Players.Where(x => x.TeamId ==
@@ -67,6 +69,7 @@ namespace StartEFCore.Controllers
         }
 
         //TODO: Id'si eşit olan oyuncunun bilgilerini güncelle (Update)
+        // set modifiedDate 
         public IActionResult Edit(int id)
         {
             Player model = _context.Players.Find(id);
@@ -80,6 +83,7 @@ namespace StartEFCore.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        // set modifiedDate 
         public IActionResult Edit(int id, Player model)
         {
             if (id != model.Id)
@@ -108,9 +112,20 @@ namespace StartEFCore.Controllers
         }
 
         // void method hic birsey dönmez
+        // set modifiedDate 
         private void TryToUpdatePlayer(Player model)
         {
-            _context.Players.Update(model);
+            Player willUpdate = _context.Players.Find(model.Id);
+
+            willUpdate.HiddenValue = model.HiddenValue;
+            willUpdate.ImageUrl = model.ImageUrl;
+            willUpdate.LongName = model.LongName;
+            willUpdate.Number = model.Number;
+            willUpdate.Position = model.Position;
+            willUpdate.TeamId = model.TeamId;
+            willUpdate.Age = model.Age;
+            willUpdate.ModifiedDate = DateTime.UtcNow;
+            //_context.Players.Update(model);
             _context.SaveChanges();
         }
         //TODO: Id'si eşit olan oyuncuyu sil (Delete)
