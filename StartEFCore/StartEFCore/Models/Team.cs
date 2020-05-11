@@ -9,17 +9,19 @@ namespace StartEFCore.Models
 {
     public class Team : Entity<int>
     {
-        [Required]
+        [Required(ErrorMessage = "Takım adı alanı zorunludur.")]
         [Display(Name = "Takım Adı")]
+        [StringLength(25, ErrorMessage = "{0} maksimum {1} karakter, minumum {2} karakter uzunluğunda olmalıdır.", MinimumLength = 5)]
         public string Name { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Logo alanı zorunludur.")]
         [DataType(DataType.ImageUrl)]
         [Display(Name = "Logo")]
         public string LogoUrl { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Şehir alanı zorunludur.")]
         [Display(Name = "Şehir")]
         public string Province { get; set; }
         [Display(Name = "Kuruluş Tarihi")]
+        [Range(1870, 2020, ConvertValueInInvariantCulture = true, ErrorMessage = "{0} yıl aralığı {1} - {2} olmalıdır.")]
         public int? Year { get; set; }
 
         public virtual ICollection<Player> Players { get; set; }
