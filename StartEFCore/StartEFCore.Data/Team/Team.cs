@@ -1,13 +1,11 @@
-﻿using StartEFCore.Models.Shared;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace StartEFCore.Models
+namespace StartEFCore.Data
 {
-    public class Team : Entity<int>
+    public class Team : Entity
     {
         [Required(ErrorMessage = "Takım adı alanı zorunludur.")]
         [Display(Name = "Takım Adı")]
@@ -25,7 +23,5 @@ namespace StartEFCore.Models
         public int? Year { get; set; }
 
         public virtual ICollection<Player> Players { get; set; }
-
-
     }
 }
