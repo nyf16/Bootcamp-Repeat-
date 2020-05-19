@@ -30,9 +30,26 @@ namespace DotNetCoreIdentity.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            return View();
+            // Gelen modeli doğrula
+            if (ModelState.IsValid)
+            {
+                // Model Doğruysa
+                // Kullaniciyi kontrol et var mi ?
+                var existUser = await _userManager.FindByEmailAsync(model.Username);
+                // Yoksa hata dön
+                if (existUser == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Bu email ile kayıtlı bir kullanıcı bulunamadı!");
+                    return View(model);
+                }
+
+                // Ana Sayfaya yönlendir (şimdilik)
+                return RedirectToAction("Index", "Home");
+            }
+            // Başarılı değilse hata dön
+            return View(model);
         }
 
         public IActionResult Register()
@@ -52,8 +69,8 @@ namespace DotNetCoreIdentity.Web.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email,
-                    //FirstName = model.FirstName,
-                    //LastName = model.LastName,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
                     EmailConfirmed = true,
                     TwoFactorEnabled = false,
                     NationalIdNumber = model.NationalIdNumber

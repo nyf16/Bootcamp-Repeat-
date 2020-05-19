@@ -349,3 +349,5 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /StartEFCore/StartEFCore/Migrations
+/DotNetCoreIdentity/src/DotNetCoreIdentity.EF/Migrations/20200519015351_UserTableChanges.cs
+/DotNetCoreIdentity/src/DotNetCoreIdentity.EF/Migrations/20200519015351_UserTableChanges.Designer.cs
