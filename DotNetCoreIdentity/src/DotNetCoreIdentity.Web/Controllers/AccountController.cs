@@ -24,13 +24,14 @@ namespace DotNetCoreIdentity.Web.Controllers
             _signInManager = signInManager;
         }
 
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             // Gelen modeli doğrula
             if (ModelState.IsValid)
@@ -44,8 +45,19 @@ namespace DotNetCoreIdentity.Web.Controllers
                     ModelState.AddModelError(string.Empty, "Bu email ile kayıtlı bir kullanıcı bulunamadı!");
                     return View(model);
                 }
+                // Kullanıcı Adı ve Şifre eşleşiyor mu ?
+                var login = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+                // Eşleşmiyorsa hata dön
+                if (!login.Succeeded)
+                {
+                    ModelState.AddModelError(string.Empty, "Bu email ve şifre ile uyumlu bir kullanıcı bulunamadı! Şifrenizi veya Mail adresinizi kontrol edin!");
+                    return View(model);
+                }
 
                 // Ana Sayfaya yönlendir (şimdilik)
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    return Redirect(returnUrl);
+
                 return RedirectToAction("Index", "Home");
             }
             // Başarılı değilse hata dön
@@ -95,6 +107,13 @@ namespace DotNetCoreIdentity.Web.Controllers
             {
                 ModelState.AddModelError(string.Empty, err.Description);
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

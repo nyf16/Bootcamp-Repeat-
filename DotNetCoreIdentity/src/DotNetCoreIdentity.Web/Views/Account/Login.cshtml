@@ -3,7 +3,7 @@
     ViewData["Title"] = "Login";
 }
 
-<h1>Giris yapmak için formu doldurun.</h1>
+<h1>Giriş yapmak için formu doldurun.</h1>
 <div class="container-fluid">
     <form asp-action="Login" method="post">
         <div asp-validation-summary="All" class="text-danger"></div>
@@ -24,6 +24,7 @@
             </div>
             <span asp-validation-for="RememberMe" class="text-danger"></span>
         </div>
+        <input type="hidden" name="returnUrl" id="returnUrl" value="@ViewBag.ReturnUrl" />
         <div class="form-group">
             <input type="submit" value="Giriş" class="btn btn-primary" />
         </div>

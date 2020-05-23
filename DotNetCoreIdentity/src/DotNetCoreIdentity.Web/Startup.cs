@@ -37,11 +37,19 @@ namespace DotNetCoreIdentity.Web
                 ));
 
             services.AddControllersWithViews();
-            services.AddRazorPages();
+            services.AddRazorPages()
+                .AddRazorRuntimeCompilation();
 
             // Kullanici arayüzü hazir bir arayüz
-            services.AddDefaultIdentity<ApplicationUser>()
+            //services.AddDefaultIdentity<ApplicationUser>()
+            //    .AddEntityFrameworkStores<ApplicationUserDbContext>();
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationUserDbContext>();
+
+            services
+                .ConfigureApplicationCookie(options =>
+                options.LoginPath = "/Account/Login");
 
             // Kullanýcý oluþturulurken kullanýlacak kurallar
 
@@ -84,8 +92,7 @@ namespace DotNetCoreIdentity.Web
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
+                    pattern: "{controller=Home}/{action=Index}/{id?}");                
             });
         }
     }
