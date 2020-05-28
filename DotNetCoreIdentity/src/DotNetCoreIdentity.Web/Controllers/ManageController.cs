@@ -48,6 +48,30 @@ namespace DotNetCoreIdentity.Web.Controllers
             return View(users);
         }
 
+        [Route("Users/Detail/{userId}")]
+        public async Task<IActionResult> UserDetail(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var model = new UserViewModel
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Id = user.Id,
+                FullName = user.FirstName + " " + user.LastName,
+                NationalIdNumber = user.NationalIdNumber
+            };
+
+            ViewBag.UserRoles = "Role Sahip Değil";
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles.Any())
+            {
+                ViewBag.userRoles = string.Join(", ", userRoles);
+            }
+
+            return View(model);
+        }
+
         [Route("Roles")]
         public IActionResult Roles()
         {
@@ -60,6 +84,14 @@ namespace DotNetCoreIdentity.Web.Controllers
                 }).ToList();
             // Component yapılabilir.
             return View(roles);
+        }
+
+        [Route("Roles/Create")]
+        public IActionResult CreateRole()
+        {
+            // Yeni rol oluşturma
+            // RoleList component bunun view'inda yer alabilir.
+            return View();
         }
 
         [HttpPost]
@@ -147,7 +179,7 @@ namespace DotNetCoreIdentity.Web.Controllers
                         string.Join(",", roleAssignationErrors));
                 }
             }
-            return View();
+            return View(model);
         }
 
         [Route("Roles/Revoke/{userId}/{roleId}")]
