@@ -35,8 +35,7 @@ namespace DotNetCoreIdentity.Web.ViewModels.Identity
         [StringLength(30, ErrorMessage = "{0} alanı en fazla {1}, en az {2} karakter olmalıdır.", MinimumLength = 3)]
         public string LastName { get; set; }
         [Required]
-        [Display(Name = "T.C. Kimlik Numarası")]
-        [StringLength(11, ErrorMessage = "{0} alanı {1} karakter olmalıdır!", MinimumLength = 11)]
+        [Display(Name = "T.C. Kimlik Numarası")]        
         public long NationalIdNumber { get; set; }
     }
 }
