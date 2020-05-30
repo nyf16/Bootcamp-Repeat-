@@ -6,7 +6,6 @@
 
 <h1>Rölü İptal Et</h1>
 
-
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -16,10 +15,11 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="RoleId" class="control-label"></label>
-                    <select asp-for="RoleId" asp-items="Model.RoleList" class="form-control" />
+                    <select asp-for="RoleId" asp-items="Model.RoleList" class="form-control"></select>
                     <span asp-validation-for="RoleId" class="text-danger"></span>
                 </div>
                 <input asp-for="UserId" type="hidden" />
+                <br />
                 <div class="form-group">
                     <input type="submit" value="Rolü Kaldır" class="btn btn-primary" />
                 </div>
