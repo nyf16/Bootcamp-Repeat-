@@ -115,5 +115,10 @@ namespace DotNetCoreIdentity.Web.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+        public IActionResult AccesDenied(string returnUrl)
+        {
+            return View();
+        }
     }
 }
