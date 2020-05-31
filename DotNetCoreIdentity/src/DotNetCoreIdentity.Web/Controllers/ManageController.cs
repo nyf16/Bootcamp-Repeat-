@@ -170,8 +170,23 @@ namespace DotNetCoreIdentity.Web.Controllers
         [Route("Roles/Edit/{id}")]
         public IActionResult DeleteRole(string id)
         {
-            // Sistem rolü veya bu role sahip kayıtlı bir kullanıcı var mı kontrol edin
+            // Herhangi bir kullanıcı bu role sahip mi veya bu bir sistem rolü mü kontrol et
+            // Silinecek rolu roleManager'dan model değişkenine ata ve return View(model) yap
             return View();
+        }
+
+        [HttpPost]
+        [Route("Roles/Delete/{id}")]
+        public async Task<IActionResult> DeleteRole(string id, RoleViewModel model)
+        {
+            // Herhangi bir kullanıcı bu role sahip mi veya bu bir sistem rolü mü kontrol et
+            // Sistem rolü ise AddModelError ile hata mesajı gönder
+            // Kullanıcı varsa AddModelError ile hata mesajı gönder
+
+            // Rolü sil
+            // Başarılıysa kullanıcı listesine gönder
+
+            return View(model);
         }
 
         [HttpGet]
