@@ -167,7 +167,7 @@ namespace DotNetCoreIdentity.Web.Controllers
             return View(model);
         }
 
-        [Route("Roles/Edit/{id}")]
+        [Route("Roles/Delete/{id}")]
         public async Task<IActionResult> DeleteRole(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);
@@ -185,9 +185,9 @@ namespace DotNetCoreIdentity.Web.Controllers
                 if (usersInThisRole.Any())
                 {
                     // Hata mesajını ilet
-                    string[] userHas = usersInThisRole.Select(x => x.UserName).ToArray();
-                    var usersInThisRoleCommaSeperated = string.Join(",", userHas);
-                    ViewBag.ErrorMessage = $"Bu role sahip bir kullanıcı var: {usersInThisRoleCommaSeperated}";
+                    string[] usersHas = usersInThisRole.Select(x => x.UserName).ToArray();
+                    var usersInThisRoleCommaSeperated = string.Join(",", usersHas);
+                    ViewBag.ErrorMessage = $"Bu role sahip kullanıcılar var: {usersInThisRoleCommaSeperated}";
                 }
             }
             // Silinecek rolu roleManager'dan model değişkenine ata ve return View(model) yap
@@ -218,11 +218,11 @@ namespace DotNetCoreIdentity.Web.Controllers
             }
             else
             {
-                var userInThisRole = await _userManager.GetUsersInRoleAsync(role.Name);
-                if (userInThisRole.Any())
+                var usersInThisRole = await _userManager.GetUsersInRoleAsync(role.Name);
+                if (usersInThisRole.Any())
                 {
                     // Hata mesajını ilet
-                    string[] usersHas = userInThisRole.Select(x => x.UserName).ToArray();
+                    string[] usersHas = usersInThisRole.Select(x => x.UserName).ToArray();
                     var usersInThisRoleCommaSeperated = string.Join(",", usersHas);
                     ViewBag.ErrorMessage = $"Bu role sahip kullanıcılar var: {usersInThisRoleCommaSeperated}";
                     hasError = true;
