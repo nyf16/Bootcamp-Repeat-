@@ -1,4 +1,5 @@
 ﻿using DotNetCoreIdentity.Domain.PostTypes;
+using DotNetCoreIdentity.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace DotNetCoreIdentity.Domain.BlogEntries
 {
-    public class Post
+    public class Post : Entity<Guid>
     {
         public string Title { get; set; }
         public string Content { get; set; }

@@ -1,4 +1,6 @@
-﻿using DotNetCoreIdentity.Domain.Identity;
+﻿using DotNetCoreIdentity.Domain.BlogEntries;
+using DotNetCoreIdentity.Domain.Identity;
+using DotNetCoreIdentity.Domain.PostTypes;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -31,5 +33,8 @@ namespace DotNetCoreIdentity.EF.Context
         /*
          DBSet'ler Buraya
          */
+
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Post> Posts { get; set; }
     }
 }
