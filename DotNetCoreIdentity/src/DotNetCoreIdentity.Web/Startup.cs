@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using DotNetCoreIdentity.Application;
 using DotNetCoreIdentity.Domain.Identity;
 using DotNetCoreIdentity.EF.Context;
@@ -65,6 +66,7 @@ namespace DotNetCoreIdentity.Web
             });
 
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddAutoMapper();
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
         }
 
