@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DotNetCoreIdentity.Application;
 using DotNetCoreIdentity.Domain.Identity;
 using DotNetCoreIdentity.EF.Context;
 using Microsoft.AspNetCore.Builder;
@@ -63,7 +64,8 @@ namespace DotNetCoreIdentity.Web
                 options.Password.RequiredUniqueChars = 1;
             });
 
-
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,7 +94,7 @@ namespace DotNetCoreIdentity.Web
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");                
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DotNetCoreIdentity.EF\DotNetCoreIdentity.EF.csproj" />
+  </ItemGroup>
+
 </Project>
