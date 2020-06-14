@@ -17,9 +17,16 @@ namespace DotNetCoreIdentity.Web.Controllers
             _categoryService = categoryService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var getAllService = await _categoryService.GetAll();
+            return View(getAllService.Result);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var getService = await _categoryService.Get(id);
+            return View(getService.Result);
         }
 
         public IActionResult Create()
@@ -37,6 +44,30 @@ namespace DotNetCoreIdentity.Web.Controllers
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index");
+                }
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var getService = await _categoryService.Get(id);
+            return View(getService.Result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id, CategoryDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                var deleteService = await _categoryService.Delete(id);
+                if (deleteService.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Bir hata oluştu!");
                 }
             }
             return View(model);

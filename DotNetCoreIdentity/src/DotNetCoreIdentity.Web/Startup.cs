@@ -67,6 +67,15 @@ namespace DotNetCoreIdentity.Web
 
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddAutoMapper();
+            //Mapper.Initialize(config => config.CreateMap<CategoryDto, Category>()
+            //.ForMember(x => x.Id, opt => opt.Ignore())
+            //.ForMember(x => x.CreatedDate, opt => opt.Ignore())
+            //.ForMember(x => x.CreatedBy, opt => opt.Ignore())
+            //.ForMember(x => x.CreatedById, opt => opt.Ignore())
+            //.ForMember(x => x.ModifiedById, opt => opt.Ignore())
+            //.ForMember(x => x.ModifiedBy, opt => opt.Ignore())
+            //.ForMember(x => x.ModifiedDate, opt => opt.Ignore())
+            //);
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
         }
 

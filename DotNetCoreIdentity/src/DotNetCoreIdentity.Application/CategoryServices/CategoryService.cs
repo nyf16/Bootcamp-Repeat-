@@ -32,7 +32,15 @@ namespace DotNetCoreIdentity.Application
                 var user = await _userManager.FindByIdAsync(input.CreatedById);
                 // AutoMapper Category sınıfını CreateCategoryInput ile oluşturabiliriz.
                 // Category catMapper = AutoMapper.Mapper.Map<Category>(input);
-                // Category catMapper = Mapper.Map<Category>(input);
+                // Mapper.Initialize(config => config.CreateMap<CategoryDto, Category >()
+                //.ForMember(x => x.Id, opt => opt.Ignore())
+                //.ForMember(x => x.CreatedDate, opt => opt.Ignore())
+                //.ForMember(x => x.CreatedBy, opt => opt.Ignore())
+                //.ForMember(x => x.ModifiedById, opt => opt.Ignore())
+                //.ForMember(x => x.ModifiedBy, opt => opt.Ignore())
+                //.ForMember(x => x.ModifiedDate, opt => opt.Ignore())
+                //);
+                //     Category catMapper = Mapper.Map<Category>(input);
                 Category category = new Category
                 {
                     Name = input.Name,
@@ -66,9 +74,27 @@ namespace DotNetCoreIdentity.Application
             }
         }
 
-        public Task<ApplicationResult> Delete(int Id)
+        public async Task<ApplicationResult> Delete(int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var willDelete = await _context.Categories.FindAsync(Id);
+                if (willDelete != null)
+                {
+                    _context.Categories.Remove(willDelete);
+                    await _context.SaveChangesAsync();
+                    return new ApplicationResult { Succeeded = true };
+                }
+                else
+                {
+                    return new ApplicationResult { Succeeded = false };
+                }
+            }
+            catch (Exception e)
+            {
+                // TODO: Hata mesajı için alan oluştur.
+                return new ApplicationResult { Succeeded = false };
+            }
         }
 
         public async Task<ApplicationResult<CategoryDto>> Get(int Id)
