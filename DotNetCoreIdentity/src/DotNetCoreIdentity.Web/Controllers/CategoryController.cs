@@ -49,6 +49,7 @@ namespace DotNetCoreIdentity.Web.Controllers
                 {
                     return RedirectToAction("Index");
                 }
+                ModelState.AddModelError(string.Empty, result.ErrorMessage);
             }
             return View(model);
         }
@@ -71,7 +72,7 @@ namespace DotNetCoreIdentity.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Bir hata oluştu!");
+                    ModelState.AddModelError(string.Empty, deleteService.ErrorMessage);
                 }
             }
             return View(model);
@@ -105,7 +106,7 @@ namespace DotNetCoreIdentity.Web.Controllers
                 {
                     return RedirectToAction("Details", new { id });
                 }
-                ModelState.AddModelError(string.Empty, "Bir hata oluştu!");
+                ModelState.AddModelError(string.Empty, updateService.ErrorMessage);
             }
             return View(model);
         }

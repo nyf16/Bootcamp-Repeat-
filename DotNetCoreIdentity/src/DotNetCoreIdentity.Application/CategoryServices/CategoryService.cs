@@ -31,17 +31,7 @@ namespace DotNetCoreIdentity.Application
             try
             {
                 var user = await _userManager.FindByIdAsync(input.CreatedById);
-                // AutoMapper Category sınıfını CreateCategoryInput ile oluşturabiliriz.
-                // Category catMapper = AutoMapper.Mapper.Map<Category>(input);
-                // Mapper.Initialize(config => config.CreateMap<CategoryDto, Category >()
-                //.ForMember(x => x.Id, opt => opt.Ignore())
-                //.ForMember(x => x.CreatedDate, opt => opt.Ignore())
-                //.ForMember(x => x.CreatedBy, opt => opt.Ignore())
-                //.ForMember(x => x.ModifiedById, opt => opt.Ignore())
-                //.ForMember(x => x.ModifiedBy, opt => opt.Ignore())
-                //.ForMember(x => x.ModifiedDate, opt => opt.Ignore())
-                //);
-                //     Category catMapper = Mapper.Map<Category>(input);
+
                 Category category = new Category
                 {
                     Name = input.Name,
@@ -52,24 +42,28 @@ namespace DotNetCoreIdentity.Application
                 };
                 _context.Categories.Add(category);
                 await _context.SaveChangesAsync();
-                ApplicationResult<CategoryDto> result = new ApplicationResult<CategoryDto>();
-                // AutoMapper ile Category sınıfını CategoryDto sınıfına dönüştürebiliriz.
-                result.Result = new CategoryDto
+                ApplicationResult<CategoryDto> result = new ApplicationResult<CategoryDto>
                 {
-                    CreatedById = category.CreatedById,
-                    CreatedDate = category.CreatedDate,
-                    CreatedBy = category.CreatedBy,
-                    Id = category.Id,
-                    Name = category.Name,
-                    UrlName = category.UrlName
+                    // AutoMapper ile Category sınıfını CategoryDto sınıfına dönüştürebiliriz.
+                    Result = new CategoryDto
+                    {
+                        CreatedById = category.CreatedById,
+                        CreatedDate = category.CreatedDate,
+                        CreatedBy = category.CreatedBy,
+                        Id = category.Id,
+                        Name = category.Name,
+                        UrlName = category.UrlName
+                    },
+                    Succeeded = true
                 };
-                result.Succeeded = true;
+
                 return result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 ApplicationResult<CategoryDto> result = new ApplicationResult<CategoryDto>();
                 result.Succeeded = false;
+                result.ErrorMessage = ex.Message;
                 // TODO: Hata mesajını gönder
                 return result;
             }
@@ -88,13 +82,13 @@ namespace DotNetCoreIdentity.Application
                 }
                 else
                 {
-                    return new ApplicationResult { Succeeded = false };
+                    return new ApplicationResult { Succeeded = false, ErrorMessage = "Bir hata oluştu lütfen kontrol edip deneyiniz!" };
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 // TODO: Hata mesajı için alan oluştur.
-                return new ApplicationResult { Succeeded = false };
+                return new ApplicationResult { Succeeded = false, ErrorMessage = ex.Message };
             }
         }
 
@@ -121,12 +115,13 @@ namespace DotNetCoreIdentity.Application
                     Succeeded = true
                 };
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 return new ApplicationResult<CategoryDto>
                 {
                     Result = new CategoryDto(),
-                    Succeeded = false
+                    Succeeded = false,
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -153,12 +148,13 @@ namespace DotNetCoreIdentity.Application
                     Succeeded = true
                 };
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 return new ApplicationResult<List<CategoryDto>>
                 {
                     Result = new List<CategoryDto>(),
-                    Succeeded = false
+                    Succeeded = false,
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -194,11 +190,12 @@ namespace DotNetCoreIdentity.Application
                     }
                 };
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 return new ApplicationResult<CategoryDto>
                 {
                     Succeeded = false,
+                    ErrorMessage = ex.Message,
                     Result = new CategoryDto()
                 };
             }
