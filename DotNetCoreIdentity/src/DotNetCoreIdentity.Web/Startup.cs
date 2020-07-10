@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using DotNetCoreIdentity.Application;
+using DotNetCoreIdentity.Application.BlogServices;
 using DotNetCoreIdentity.Domain.Identity;
 using DotNetCoreIdentity.EF.Context;
 using Microsoft.AspNetCore.Builder;
@@ -66,6 +67,7 @@ namespace DotNetCoreIdentity.Web
             });
 
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IPostService, PostService>();
             services.AddAutoMapper();
             //Mapper.Initialize(config => config.CreateMap<CategoryDto, Category>()
             //.ForMember(x => x.Id, opt => opt.Ignore())
