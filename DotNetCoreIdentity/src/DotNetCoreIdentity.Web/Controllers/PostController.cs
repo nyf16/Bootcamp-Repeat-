@@ -16,9 +16,8 @@ namespace DotNetCoreIdentity.Web.Controllers
             _postService = postService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
+
     }
 }
+
