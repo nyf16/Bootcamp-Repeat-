@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using DotNetCoreIdentity.Application;
 using DotNetCoreIdentity.Application.BlogServices;
@@ -47,6 +48,20 @@ namespace DotNetCoreIdentity.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreatePostInput model)
         {
+            if (ModelState.IsValid)
+            {
+                // createdById alanını doldur
+                model.CreatedById = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                // createService gönder
+                var createService = await _postService.Create(model);
+                // hata yoksa Index'e redirect et
+                if (createService.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+                // hata varsa hatayı ModelState' e ekle
+                ModelState.AddModelError(string.Empty, createService.ErrorMessage);
+            }
             return View(model);
         }
 
