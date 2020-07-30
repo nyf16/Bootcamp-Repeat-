@@ -7,6 +7,7 @@ using DotNetCoreIdentity.Application;
 using DotNetCoreIdentity.Application.BlogServices;
 using DotNetCoreIdentity.Application.BlogServices.Dtos;
 using DotNetCoreIdentity.Domain.BlogEntries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -31,6 +32,12 @@ namespace DotNetCoreIdentity.Web.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Details(Guid id)
+        {
+            ApplicationResult<PostDto> data = await _postService.Get(id);
+            return View(data.Result);
+        }
+
         public async Task<IActionResult> Create()
         {
             var categoryList = await _categoryService.GetAll();
@@ -44,6 +51,7 @@ namespace DotNetCoreIdentity.Web.Controllers
 
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Create(CreatePostInput model)
