@@ -7,7 +7,6 @@ using DotNetCoreIdentity.Application;
 using DotNetCoreIdentity.Application.BlogServices;
 using DotNetCoreIdentity.Application.BlogServices.Dtos;
 using DotNetCoreIdentity.Domain.BlogEntries;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -70,6 +69,28 @@ namespace DotNetCoreIdentity.Web.Controllers
                 // hata varsa hatayı ModelState' e ekle
                 ModelState.AddModelError(string.Empty, createService.ErrorMessage);
             }
+            return View(model);
+        }
+
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var post = await _postService.Get(id);
+            var categoryList = await _categoryService.GetAll();
+            ViewBag.CategoryDDL = categoryList.Result.Select(c => new SelectListItem
+            {
+                Selected = false,
+                Value = c.Id.ToString(),
+                Text = c.Name
+            }).ToList();
+            UpdatePostInput model = new UpdatePostInput
+            {
+                Id = post.Result.Id,
+                CategoryId = post.Result.CategoryId,
+                Content = post.Result.Content,
+                Title = post.Result.Title,
+                UrlName = post.Result.UrlName,
+                CreatedById = post.Result.CreatedById
+            };
             return View(model);
         }
 
