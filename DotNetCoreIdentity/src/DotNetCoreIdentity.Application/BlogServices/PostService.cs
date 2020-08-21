@@ -165,7 +165,37 @@ namespace DotNetCoreIdentity.Application.BlogServices
 
         public async Task<ApplicationResult<PostDto>> Update(UpdatePostInput input)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var getExistPost = await _context.Posts.FindAsync(input.Id);
+                // Hata var mı kontrol ediyoruz hata varsa böyle bir post yok demektir.
+                if (getExistPost == null)
+                {
+                    return new ApplicationResult<PostDto>
+                    {
+                        Result = new PostDto(),
+                        Succeeded = false,
+                        ErrorMessage = "Böyle bir Post bulunamadı."
+                    };
+                }
+                // Userı al
+                var user = await _userManager.FindByIdAsync(input.CreatedById);
+                getExistPost.ModifiedBy = user.UserName;
+                _mapper.Map(input, getExistPost);
+                _context.Update(getExistPost);
+                await _context.SaveChangesAsync();
+                return await Get(getExistPost.Id);
+
+            }
+            catch (Exception ex)
+            {
+                return new ApplicationResult<PostDto>
+                {
+                    Result = new PostDto(),
+                    Succeeded = false,
+                    ErrorMessage = ex.Message
+                };
+            }
         }
     }
 }
