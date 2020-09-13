@@ -156,7 +156,24 @@ namespace DotNetCoreIdentity.Application.BlogServices
 
         public async Task<ApplicationResult> Delete(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Post willDeletePost = await _context.Posts.FindAsync(id);
+                _context.Posts.Remove(willDeletePost);
+                await _context.SaveChangesAsync();
+                return new ApplicationResult
+                {
+                    Succeeded = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApplicationResult
+                {
+                    ErrorMessage = ex.Message,
+                    Succeeded = false
+                };
+            }
         }
 
 
