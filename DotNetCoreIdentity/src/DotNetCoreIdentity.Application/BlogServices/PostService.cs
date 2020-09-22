@@ -81,7 +81,7 @@ namespace DotNetCoreIdentity.Application.BlogServices
         {
             try
             {
-                List<Post> listRaw = await _context.Posts.ToListAsync();
+                List<Post> listRaw = await _context.Posts.Include(x => x.Category).ToListAsync();
                 List<PostDto> list = _mapper.Map<List<PostDto>>(listRaw);
                 //List<PostDto> list = await _context.Posts.Select(post => new PostDto
                 //{
