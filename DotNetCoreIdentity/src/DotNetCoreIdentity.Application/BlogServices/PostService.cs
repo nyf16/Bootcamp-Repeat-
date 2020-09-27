@@ -214,5 +214,40 @@ namespace DotNetCoreIdentity.Application.BlogServices
                 };
             }
         }
+
+        public async Task<ApplicationResult<PostDto>> GetByUrl(string categoryUrl, string postUrl)
+        {
+            try
+            {
+                var category = await _context.Categories.Where(c => c.UrlName == categoryUrl).FirstOrDefaultAsync();
+                if (category != null)
+                {
+                    var post = await _context.Posts.Where(p => p.CategoryId == category.Id && p.UrlName == postUrl).FirstOrDefaultAsync();
+                    if (post != null)
+                    {
+                        return new ApplicationResult<PostDto>
+                        {
+                            Succeeded = true,
+                            Result = _mapper.Map<PostDto>(post)
+                        };
+                    }
+                }
+                return new ApplicationResult<PostDto>
+                {
+                    Result = new PostDto(),
+                    Succeeded = false,
+                    ErrorMessage = "Böyle bir içerik bulunamadı !"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApplicationResult<PostDto>
+                {
+                    Result = new PostDto(),
+                    Succeeded = false,
+                    ErrorMessage = ex.Message
+                };
+            }
+        }
     }
 }
