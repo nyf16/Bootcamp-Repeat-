@@ -72,6 +72,14 @@ namespace DotNetCoreIdentity.Web.Controllers
                 // hata varsa hatayı ModelState' e ekle
                 ModelState.AddModelError(string.Empty, createService.ErrorMessage);
             }
+
+            var categoryList = await _categoryService.GetAll();
+            ViewBag.CategoryDDL = categoryList.Result.Select(x => new SelectListItem
+            {
+                Selected = false,
+                Text = x.Name,
+                Value = x.Id.ToString()
+            }).ToList();
             return View(model);
         }
 
