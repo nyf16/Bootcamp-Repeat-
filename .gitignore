@@ -353,3 +353,4 @@ MigrationBackup/
 /DotNetCoreIdentity/src/DotNetCoreIdentity.EF/Migrations/20200519015351_UserTableChanges.Designer.cs
 /DotNetCoreIdentity/src/DotNetCoreIdentity.EF/Migrations/20200607152706_CategoryServices.cs
 /DotNetCoreIdentity/src/DotNetCoreIdentity.EF/Migrations/20200607152706_CategoryServices.Designer.cs
+/DotNetCoreIdentity/src/DotNetCoreIdentity.EF/Migrations

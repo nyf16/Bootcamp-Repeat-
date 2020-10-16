@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -174,7 +175,29 @@ namespace DotNetCoreIdentity.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadImage(Guid id, IFormFile file)
         {
-            return View();
+            if (file != null || file.Length != 0)
+            {
+                // Resmi al değişkene ata
+                FileInfo fi = new FileInfo(file.FileName);
+                // Bir dosya adı belirle
+                var newfileName = id.ToString() + "_" + String.Format("{0:d}", (DateTime.Now.Ticks / 10) % 100000000) + fi.Extension;
+                // Resmi belirtilen path'e yükle
+                var webPath = _env.WebRootPath;
+                var path = Path.Combine("", webPath + @"\images\" + newfileName);
+                var pathToSave = @"/images/" + newfileName;
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // Yükleme tamamlandıktan sonra resmin yolunu db'ye yükle (imageUrl alanını oluştur)
+                var updateUrl = await _postService.UpdateImageUrl(id, pathToSave);
+                if (updateUrl.Succeeded)
+                {
+                    return RedirectToAction("UploadImage", new { id });
+                }
+            }
+            return RedirectToAction("Error", "Home");
         }
     }
 }
