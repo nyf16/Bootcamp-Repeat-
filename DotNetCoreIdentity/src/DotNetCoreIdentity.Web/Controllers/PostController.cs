@@ -152,6 +152,7 @@ namespace DotNetCoreIdentity.Web.Controllers
             var model = await _postService.Get(id);
             return View(model.Result);
         }
+
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id, PostDto input)
         {
@@ -166,6 +167,15 @@ namespace DotNetCoreIdentity.Web.Controllers
             ModelState.AddModelError(string.Empty, "Bir hata oluştu");
             return View(input);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> DeleteApi([FromBody] PostDeleteDto model)
+        {
+            var delete = await _postService.Delete(model.Id);
+            return Json(delete);
+        }
+
         public async Task<IActionResult> UploadImage(Guid id)
         {
             ApplicationResult<PostDto> data = await _postService.Get(id);
