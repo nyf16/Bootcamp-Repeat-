@@ -1,8 +1,35 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\CMS\**" />
+    <Content Remove="Areas\CMS\**" />
+    <EmbeddedResource Remove="Areas\CMS\**" />
+    <None Remove="Areas\CMS\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Areas\CMS\Controllers\CategoryController.cs" />
+    <Compile Include="Areas\CMS\Controllers\PostController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Areas\CMS\Views\Category\Create.cshtml" />
+    <Content Include="Areas\CMS\Views\Category\Delete.cshtml" />
+    <Content Include="Areas\CMS\Views\Category\Details.cshtml" />
+    <Content Include="Areas\CMS\Views\Category\Index.cshtml" />
+    <Content Include="Areas\CMS\Views\Category\Update.cshtml" />
+    <Content Include="Areas\CMS\Views\Post\Create.cshtml" />
+    <Content Include="Areas\CMS\Views\Post\Delete.cshtml" />
+    <Content Include="Areas\CMS\Views\Post\Details.cshtml" />
+    <Content Include="Areas\CMS\Views\Post\Index.cshtml" />
+    <Content Include="Areas\CMS\Views\Post\Update.cshtml" />
+    <Content Include="Areas\CMS\Views\Post\UploadImage.cshtml" />
+    <Content Include="Areas\CMS\_ViewImports.cshtml" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.8" />
@@ -18,7 +45,7 @@
     <ProjectReference Include="..\DotNetCoreIdentity.EF\DotNetCoreIdentity.EF.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup>    
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
