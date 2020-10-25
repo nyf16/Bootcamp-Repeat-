@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace DotNetCoreIdentity.Web.Areas.Account.Controllers
+namespace DotNetCoreIdentity.Web.Account.Controllers
 {
     [Authorize(Roles = "Admin")]
     [Route("Manage")]

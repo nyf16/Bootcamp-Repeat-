@@ -15,9 +15,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Hosting;
 
-namespace DotNetCoreIdentity.Web.CMS.Controllers
+namespace DotNetCoreIdentity.Web.Controllers
 {
     [Authorize(Roles = "Admin,Editor")]
     [Area("Post")]
@@ -26,9 +25,9 @@ namespace DotNetCoreIdentity.Web.CMS.Controllers
         private readonly IPostService _postService;
         private readonly ICategoryService _categoryService;
         private readonly IFileProvider _fileProvider;
-        private readonly IWebHostEnvironment _env;
+        private readonly IHostingEnvironment _env;
 
-        public PostController(IPostService postService, ICategoryService categoryService, IFileProvider fileProvider, IWebHostEnvironment env)
+        public PostController(IPostService postService, ICategoryService categoryService, IFileProvider fileProvider, IHostingEnvironment env)
         {
             _postService = postService;
             _categoryService = categoryService;

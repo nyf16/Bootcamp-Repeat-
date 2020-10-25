@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 
-namespace DotNetCoreIdentity.Web.Areas.CMS.Controllers
+namespace DotNetCoreIdentity.Web.Areas.Category
 {
     [Authorize(Roles = "Admin, Editor")]
     [Area("Category")]
