@@ -16,10 +16,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.FileProviders;
 
-namespace DotNetCoreIdentity.Web.Controllers
+namespace DotNetCoreIdentity.Web.CMS.Controllers
 {
     [Authorize(Roles = "Admin,Editor")]
-    [Area("Post")]
+    [Area("CMS")]
     public class PostController : Controller
     {
         private readonly IPostService _postService;

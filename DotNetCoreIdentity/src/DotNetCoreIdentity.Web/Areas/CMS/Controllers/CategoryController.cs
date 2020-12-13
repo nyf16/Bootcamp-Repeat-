@@ -10,10 +10,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 
-namespace DotNetCoreIdentity.Web.Areas.Category
+namespace DotNetCoreIdentity.Web.Areas.CMS.Controllers
 {
     [Authorize(Roles = "Admin, Editor")]
-    [Area("Category")]
+    [Area("CMS")]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;

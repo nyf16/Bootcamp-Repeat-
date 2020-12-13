@@ -8,7 +8,7 @@ using DotNetCoreIdentity.Application.BlogServices.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetCoreIdentity.Web.Controllers
-{    
+{
     public class BlogController : Controller
     {
         private readonly IPostService _postService;
