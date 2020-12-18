@@ -47,5 +47,57 @@ namespace DotNetCoreIdentity.Test
                 Assert.Equal(result.Result.CreatedById, item.CreatedById);
             }
         }
+
+        [Fact]
+        public async Task UpdateCategory()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationUserDbContext>().UseInMemoryDatabase(databaseName: "Test_UpdateCategory").Options;
+            MapperConfiguration mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapperProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            ApplicationResult<CategoryDto> resultCreate = new ApplicationResult<CategoryDto>();
+            // Bir yeni kategori oluştur.
+            using (var inMemoryContext = new ApplicationUserDbContext(options))
+            {
+                var service = new CategoryService(inMemoryContext, mapper);
+                CreateCategoryInput fakeCategory = new CreateCategoryInput
+                {
+                    CreatedById = new Guid().ToString(), // Sahte kullanici
+                    Name = "Lorem Ipsum",
+                    UrlName = "lorem-ipsum"
+                };
+
+                resultCreate = await service.Create(fakeCategory);
+            }
+            ApplicationResult<CategoryDto> resultUpdate = new ApplicationResult<CategoryDto>();
+
+            // Var olan kategoriyi güncelle
+            using (var inMemoryContext = new ApplicationUserDbContext(options))
+            {
+                var service = new CategoryService(inMemoryContext, mapper);
+
+                var item = await inMemoryContext.Categories.FirstOrDefaultAsync();
+                var fakeUpdate = new UpdateCategoryInput
+                {
+                    Id = item.Id,
+                    CreatedById = item.CreatedById,
+                    ModifiedById = new Guid().ToString(),
+                    Name = "Lorem Ipsum Dolor",
+                    UrlName = "lorem-ipsum-dolor"
+                };
+                // Update servici calistir
+                resultUpdate = await service.Update(fakeUpdate);
+            }
+            // kontrol et
+            using (var inMemoryContext = new ApplicationUserDbContext(options))
+            {
+                // contextte kategori var mi ?
+                // create servis düzgün calisti mi ?
+                // update servis düzgün calisti mi ?
+                // update islem basarili mi (context ten gelen veri ile string ifadeleri karsilastir)
+            }
+        }
     }
 }
