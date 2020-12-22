@@ -19,5 +19,7 @@ namespace DotNetCoreIdentity.Application.BlogServices.Dtos
         [Display(Name = "Kategori")]
         public int? CategoryId { get; set; }
         public CategoryDto Category { get; set; }
+
+        public string PlainContent { get; set; }
     }
 }

@@ -11,16 +11,16 @@
 
                     <h5 class="card-title">@item.Title</h5>
 
-                    @if (item.Content.Length > 90)
+                    @if (item.PlainContent.Length > 90)
                     {
                         <p class="card-text">
-                            @item.Content.Substring(0, 90)..
+                            @Html.Raw(item.PlainContent.Substring(0, 90))
                         </p>
                     }
                     else
                     {
                         <p class="card-text">
-                            @item.Content
+                            @Html.Raw(item.PlainContent)
                         </p>
                     }
                     <a asp-action="Index" asp-controller="Blog" asp-route-categoryUrl="@item.Category.UrlName" asp-route-postUrl="@item.UrlName" class="card-link">Devamını Oku</a>
