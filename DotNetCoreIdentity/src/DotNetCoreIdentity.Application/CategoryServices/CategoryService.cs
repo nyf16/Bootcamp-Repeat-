@@ -61,11 +61,12 @@ namespace DotNetCoreIdentity.Application
             }
             catch (Exception ex)
             {
-                ApplicationResult<CategoryDto> result = new ApplicationResult<CategoryDto>();
-                result.Succeeded = false;
-                result.ErrorMessage = ex.Message;
+                return new ApplicationResult<CategoryDto>
+                {
+                    Succeeded = false,
+                    ErrorMessage = ex.Message
 
-                return result;
+                };
             }
         }
 
@@ -167,7 +168,8 @@ namespace DotNetCoreIdentity.Application
                 getExistCategory.Name = input.Name;
                 getExistCategory.UrlName = input.UrlName;
                 //getExistCategory.ModifiedBy = modifierUser.UserName;
-                //getExistCategory.ModifiedById = modifierUser.Id;
+                getExistCategory.ModifiedBy = input.ModifiedBy;
+                getExistCategory.ModifiedById = input.ModifiedById;
                 getExistCategory.ModifiedDate = DateTime.UtcNow;
                 _context.Update(getExistCategory);
                 await _context.SaveChangesAsync();

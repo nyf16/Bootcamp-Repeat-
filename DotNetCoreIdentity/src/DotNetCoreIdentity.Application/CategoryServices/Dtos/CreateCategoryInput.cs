@@ -14,5 +14,6 @@ namespace DotNetCoreIdentity.Application.CategoryServices.Dtos
         [Display(Name = "Seo Dostu Url")]
         public string UrlName { get; set; }
         public string CreatedById { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

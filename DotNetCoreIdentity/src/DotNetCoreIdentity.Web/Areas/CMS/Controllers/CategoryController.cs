@@ -44,7 +44,8 @@ namespace DotNetCoreIdentity.Web.Areas.CMS.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.CreatedById = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                model.CreatedBy = User.FindFirst(ClaimTypes.Name).Value;
+
                 var result = await _categoryService.Create(model);
                 if (result.Succeeded)
                 {
@@ -99,9 +100,11 @@ namespace DotNetCoreIdentity.Web.Areas.CMS.Controllers
             if (ModelState.IsValid)
             {
                 var getService = await _categoryService.Get(id);
-                model.CreatedById = getService.Result.CreatedById;
+                model.CreatedBy = getService.Result.CreatedBy;
+
                 model.Id = getService.Result.Id;
-                model.ModifiedById = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                model.ModifiedBy = User.FindFirst(ClaimTypes.Name).Value;
+
                 var updateService = await _categoryService.Update(model);
                 if (updateService.Succeeded)
                 {

@@ -30,6 +30,7 @@ namespace DotNetCoreIdentity.Test
                 CreateCategoryInput fakeCategory = new CreateCategoryInput
                 {
                     CreatedById = Guid.NewGuid().ToString(), // Sahte kullanici
+                    CreatedBy = "Tester1",
                     Name = "Lorem Ipsum",
                     UrlName = "lorem-ipsum"
                 };
@@ -42,6 +43,7 @@ namespace DotNetCoreIdentity.Test
                 Assert.NotNull(result.Result);
                 Assert.Equal(1, await inMemoryContext.Categories.CountAsync());
                 var item = await inMemoryContext.Categories.FirstOrDefaultAsync();
+                Assert.Equal("Tester1", item.CreatedBy);
                 Assert.Equal("Lorem Ipsum", item.Name);
                 Assert.Equal("lorem-ipsum", item.UrlName);
                 Assert.Equal(result.Result.CreatedById, item.CreatedById);
@@ -65,6 +67,7 @@ namespace DotNetCoreIdentity.Test
                 CreateCategoryInput fakeCategory = new CreateCategoryInput
                 {
                     CreatedById = Guid.NewGuid().ToString(), // Sahte kullanici
+                    CreatedBy = "Tester1",
                     Name = "Lorem Ipsum",
                     UrlName = "lorem-ipsum"
                 };
@@ -88,6 +91,7 @@ namespace DotNetCoreIdentity.Test
                     Id = item.Id,
                     CreatedById = item.CreatedById,
                     ModifiedById = Guid.NewGuid().ToString(),
+                    ModifiedBy = "Tester2",
                     Name = "Lorem Ipsum Dolor",
                     UrlName = "lorem-ipsum-dolor"
                 };
@@ -104,6 +108,8 @@ namespace DotNetCoreIdentity.Test
                 Assert.NotNull(resultUpdate.Result);
                 // update islem basarili mi (context ten gelen veri ile string ifadeleri karsilastir)
                 var item = await inMemoryContext.Categories.FirstAsync();
+                Assert.Equal("Tester1", item.CreatedBy);
+                Assert.Equal("Tester2", item.ModifiedBy);
                 Assert.Equal("Lorem Ipsum Dolor", item.Name);
                 Assert.Equal("lorem-ipsum-dolor", item.UrlName);
                 Assert.Equal(resultUpdate.Result.ModifiedById, item.ModifiedById);

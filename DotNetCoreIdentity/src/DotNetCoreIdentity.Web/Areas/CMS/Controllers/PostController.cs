@@ -70,7 +70,7 @@ namespace DotNetCoreIdentity.Web.CMS.Controllers
             if (ModelState.IsValid)
             {
                 // createdById alanını doldur
-                model.CreatedById = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                model.CreatedBy = User.FindFirst(ClaimTypes.Name).Value;
                 // createService gönder
                 var createService = await _postService.Create(model);
                 // hata yoksa Index'e redirect et
@@ -126,7 +126,8 @@ namespace DotNetCoreIdentity.Web.CMS.Controllers
                 }
                 else
                 {
-                    model.ModifiedById = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    model.ModifiedBy = User.FindFirst(ClaimTypes.Name).Value;
+
                     var updatePost = await _postService.Update(model);
                     if (updatePost.Succeeded)
                     {

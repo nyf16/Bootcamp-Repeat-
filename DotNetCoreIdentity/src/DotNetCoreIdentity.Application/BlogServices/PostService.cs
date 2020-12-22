@@ -17,13 +17,13 @@ namespace DotNetCoreIdentity.Application.BlogServices
     public class PostService : IPostService
     {
         private readonly ApplicationUserDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        //private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
 
         public PostService(ApplicationUserDbContext context, UserManager<ApplicationUser> userManager, IMapper mapper)
         {
             _context = context;
-            _userManager = userManager;
+            //_userManager = userManager;
             _mapper = mapper;
         }
 
@@ -132,10 +132,10 @@ namespace DotNetCoreIdentity.Application.BlogServices
             try
             {
                 // userı al
-                var user = await _userManager.FindByIdAsync(input.CreatedById);
+                //var user = await _userManager.FindByIdAsync(input.CreatedById);
                 // maple
                 Post newPost = _mapper.Map<Post>(input);
-                newPost.CreatedBy = user.UserName;
+                //newPost.CreatedBy = user.UserName;
                 // context'e ekle
                 await _context.Posts.AddAsync(newPost);
                 // Kaydet
@@ -196,8 +196,8 @@ namespace DotNetCoreIdentity.Application.BlogServices
                     };
                 }
                 // Userı al
-                var user = await _userManager.FindByIdAsync(input.CreatedById);
-                getExistPost.ModifiedBy = user.UserName;
+                //var user = await _userManager.FindByIdAsync(input.CreatedById);
+                //getExistPost.ModifiedBy = user.UserName;
                 _mapper.Map(input, getExistPost);
                 _context.Update(getExistPost);
                 await _context.SaveChangesAsync();
