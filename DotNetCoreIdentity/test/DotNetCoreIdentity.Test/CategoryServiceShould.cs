@@ -163,5 +163,98 @@ namespace DotNetCoreIdentity.Test
             }
         }
         // Delete testi
+        [Fact]
+        public async Task DeleteCategory()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationUserDbContext>().UseInMemoryDatabase(databaseName: "Test_DeleteCategory").Options;
+            MapperConfiguration mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapperProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            ApplicationResult<CategoryDto> resultCreate = new ApplicationResult<CategoryDto>();
+            using (var inMemoryContext = new ApplicationUserDbContext(options))
+            {
+                resultCreate = await CreateCategory(inMemoryContext, mapper);
+            }
+
+            ApplicationResult resultDelete = new ApplicationResult();
+            using (var inMemoryContext = new ApplicationUserDbContext(options))
+            {
+                // Create servis düzgün calisti mi ?
+                Assert.True(resultCreate.Succeeded);
+                Assert.NotNull(resultCreate.Result);
+                // Delete servisi calistir
+                var service = new CategoryService(inMemoryContext, mapper);
+                resultDelete = await service.Delete(resultCreate.Result.Id);
+            }
+            using (var inMemoryContext = new ApplicationUserDbContext(options))
+            {
+                // Delete servis kontrolü
+                Assert.True(resultDelete.Succeeded);
+                Assert.Null(resultDelete.ErrorMessage);
+                // Delete basarili mi db den kontrol et
+                Assert.Equal(0, await inMemoryContext.Categories.CountAsync());
+            }
+        }
+        [Fact]
+        public async Task GetAllCategory()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationUserDbContext>().UseInMemoryDatabase(databaseName: "Test_GetAllCategory").Options;
+            MapperConfiguration mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapperProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+
+            List<ApplicationResult<CategoryDto>> resultCreates = new List<ApplicationResult<CategoryDto>>();
+            // Iki kategori olustur
+            using (var inMemoryContext = new ApplicationUserDbContext(options))
+            {
+                var fakeCategory1 = new CreateCategoryInput
+                {
+                    CreatedById = Guid.NewGuid().ToString(), // Sahte kullanici
+                    CreatedBy = "Tester1",
+                    Name = "Lorem Ipsum 1",
+                    UrlName = "lorem-ipsum-1"
+                };
+                var fakeCategory2 = new CreateCategoryInput
+                {
+                    CreatedById = Guid.NewGuid().ToString(), //Sahte kullanici
+                    CreatedBy = "Tester2",
+                    Name = "Lorem Ipsum 2",
+                    UrlName = "lorem-ipsum-2"
+                };
+                resultCreates.Add(await CreateCategory(inMemoryContext, mapper, fakeCategory1));
+                resultCreates.Add(await CreateCategory(inMemoryContext, mapper, fakeCategory2));
+            }
+            ApplicationResult<List<CategoryDto>> resultGetAll = new ApplicationResult<List<CategoryDto>>();
+            // Create servis dogru calisti mi kontrol et ve get servisi calistir
+            using (var inMemoryContext = new ApplicationUserDbContext(options))
+            {
+                //Create servis düzgün calisti mi ?
+                foreach (var resultCreate in resultCreates)
+                {
+                    Assert.True(resultCreate.Succeeded);
+                    Assert.NotNull(resultCreate.Result);
+                }
+                // Get islemini calistir
+                var service = new CategoryService(inMemoryContext, mapper);
+                resultGetAll = await service.GetAll();
+            }
+            // Get servis dogru calisti mi kontrol et
+            using (var inMemoryContext = new ApplicationUserDbContext(options))
+            {
+                //Get servis dogru calisti mi kontrolü
+                Assert.True(resultGetAll.Succeeded);
+                Assert.NotNull(resultGetAll.Result);
+                Assert.Equal(2, await inMemoryContext.Categories.CountAsync());
+                var items = await inMemoryContext.Categories.ToListAsync();
+                Assert.Equal("Lorem Ipsum 1", items[0].Name);
+                Assert.Equal("lorem-ipsum-1", items[0].UrlName);
+                Assert.Equal("Lorem Ipsum 2", items[1].Name);
+                Assert.Equal("lorem-ipsum-2", items[1].UrlName);
+            }
+        }
     }
 }
