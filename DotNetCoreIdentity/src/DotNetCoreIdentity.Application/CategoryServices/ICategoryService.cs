@@ -11,10 +11,10 @@ namespace DotNetCoreIdentity.Application
     {
         /* Metodlar buraya */
 
-        Task<ApplicationResult<CategoryDto>> Create(CreateCategoryInput input);
-        Task<ApplicationResult<CategoryDto>> Get(int Id);
-        Task<ApplicationResult<List<CategoryDto>>> GetAll();
-        Task<ApplicationResult<CategoryDto>> Update(UpdateCategoryInput input);
-        Task<ApplicationResult> Delete(int Id);
+        //Task<ApplicationResult<CategoryDto>> Create(CreateCategoryInput input);
+        //Task<ApplicationResult<CategoryDto>> Get(int Id);
+        //Task<ApplicationResult<List<CategoryDto>>> GetAll();
+        //Task<ApplicationResult<CategoryDto>> Update(UpdateCategoryInput input);
+        //Task<ApplicationResult> Delete(int Id);
     }
 }

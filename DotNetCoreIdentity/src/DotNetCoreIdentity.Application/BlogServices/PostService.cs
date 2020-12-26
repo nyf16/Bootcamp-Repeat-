@@ -20,7 +20,7 @@ namespace DotNetCoreIdentity.Application.BlogServices
         //private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
 
-        public PostService(ApplicationUserDbContext context, UserManager<ApplicationUser> userManager, IMapper mapper)
+        public PostService(ApplicationUserDbContext context, /*UserManager<ApplicationUser> userManager*/ IMapper mapper)
         {
             _context = context;
             //_userManager = userManager;
