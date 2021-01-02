@@ -1,22 +1,21 @@
+using AutoMapper;
+using DotNetCoreIdentity.Application;
+using DotNetCoreIdentity.Application.Shared;
 using DotNetCoreIdentity.Domain.Identity;
 using DotNetCoreIdentity.EF.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DotNetCoreIdentity.Web.Api
 {
@@ -56,7 +55,7 @@ namespace DotNetCoreIdentity.Web.Api
                 .AddEntityFrameworkStores<ApplicationUserDbContext>();
 
             // Add Authentication - Auth/Token yonetimi
-            var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]));
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]));
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -68,10 +67,11 @@ namespace DotNetCoreIdentity.Web.Api
                 config.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = signinKey,
+                    IssuerSigningKey = signingKey,
                     ValidateAudience = true,
                     ValidAudience = this.Configuration["Tokens:Audience"],
                     ValidateIssuer = true,
+                    ValidIssuer = this.Configuration["Tokens:Issuer"],
                     ValidateLifetime = true
                 };
             });
@@ -86,6 +86,85 @@ namespace DotNetCoreIdentity.Web.Api
             });
             #endregion
 
+
+            #region swagger config
+            var security = new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Bearer", new string[]{ } }
+                };
+            services.AddSwaggerGen(s =>
+            {
+                s.SwaggerDoc(
+                    "DotNetCoreIdentityApi",
+                    new OpenApiInfo
+                    {
+                        Title = "DotNetCoreIdentity Api Documentation",
+                        Version = "0.0.1",
+                        Contact = new OpenApiContact
+                        {
+                            Email = "info@kodluyoruz.org",
+                            Name = "Kodluyoruz",                            
+                        },
+                        Description = "Bu bir api dokumantasyonudur!"
+                    });
+
+                s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.ApiKey,
+                    Description = "Jwt Auth",
+                    In = ParameterLocation.Header,
+                    Name = "Authorization"
+                });
+                s.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Id = JwtBearerDefaults.AuthenticationScheme,
+                                Type =ReferenceType.SecurityScheme
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+
+            });
+            #endregion
+
+            //var jwtSecurityScheme = new OpenApiSecurityScheme
+            //{
+            //    Scheme = "Bearer",
+            //    BearerFormat = "JWT",
+            //    Name = "Kodluyoruz",
+            //    In = ParameterLocation.Header,
+            //    Type = SecuritySchemeType.Http,
+            //    Description = "Bu bir api dokumantasyonudur!",
+
+            //    Reference = new OpenApiReference
+            //    {
+            //        Id = JwtBearerDefaults.AuthenticationScheme,
+            //        Type = ReferenceType.SecurityScheme
+            //    }
+            //};
+            //s.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+            //s.AddSecurityRequirement(new OpenApiSecurityRequirement
+            //{
+            //    {jwtSecurityScheme,Array.Empty<string>() }
+            //});
+
+
+            MapperConfiguration mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapperProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+
+            services.AddScoped<ICategoryService, CategoryService>();
+
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
         }
 
@@ -98,6 +177,15 @@ namespace DotNetCoreIdentity.Web.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+            app.UseSwagger().UseSwaggerUI(u =>
+            {
+                u.SwaggerEndpoint("/swagger/DotNetCoreIdentityApi/swagger.json", "Swagger Test Api Endpoint");
+            });
 
             app.UseHttpsRedirection();
 
