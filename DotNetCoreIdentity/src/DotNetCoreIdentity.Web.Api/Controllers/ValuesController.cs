@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace DotNetCoreIdentity.Web.Api.Controllers
     {
         // GET api/values
         [HttpGet]
+        [Authorize]
         public ActionResult<IEnumerable<string>> Get()
         {
             return new string[] { "value1", "value2" };
