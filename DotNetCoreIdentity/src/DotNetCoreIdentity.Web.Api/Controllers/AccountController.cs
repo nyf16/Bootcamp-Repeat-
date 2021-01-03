@@ -89,7 +89,7 @@ namespace DotNetCoreIdentity.Web.Api.Controllers
         {
             foreach (var err in result.Errors)
             {
-                ModelState.AddModelError(string.Empty, err.Description);
+                ModelState.AddModelError("error", err.Description);
             }
         }
 
