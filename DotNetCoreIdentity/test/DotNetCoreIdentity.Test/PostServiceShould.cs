@@ -50,6 +50,8 @@ namespace DotNetCoreIdentity.Test
 
         async Task AssertCreatedPostAsync(ApplicationUserDbContext inMemoryContext, List<ApplicationResult<PostDto>> resultList, List<CreatePostInput> fakePostList)
         {
+            // Burasi önemli!
+            Assert.Equal(fakePostList.Count, await inMemoryContext.Posts.CountAsync());
             foreach (var fakePost in fakePostList)
             {
                 ApplicationResult<PostDto> foundResult = resultList.Find(x =>
